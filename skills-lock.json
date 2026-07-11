@@ -91,6 +91,12 @@
       "skillPath": "skills/engineering/research/SKILL.md",
       "computedHash": "87d17f5103899fbe179b552a85485d50f2316ca5b3128f5716af7d88817533e1"
     },
+    "riteway-test-naming": {
+      "source": "bopstack/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/riteway-test-naming/SKILL.md",
+      "computedHash": "dd17cfb516d246697424fac5e14eb5bc372841876a943deb0669eba6c0158369"
+    },
     "setup-matt-pocock-skills": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -98,10 +104,10 @@
       "computedHash": "4850d7286f7176178963ff53aeb928b241854785a0d8b5d8fe6d285190188651"
     },
     "tdd": {
-      "source": "mattpocock/skills",
+      "source": "bopstack/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
-      "computedHash": "c9326b88419cfba1d54dd713b7ddb23020e6a93f4b0d13aea58cebba58cda2ee"
+      "computedHash": "1d03635c4375be34d8cb99762559fc0ee69cf636e900d5004b67b8445eb02aa1"
     },
     "teach": {
       "source": "mattpocock/skills",
@@ -126,6 +132,12 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/triage/SKILL.md",
       "computedHash": "b77ea99c2e6e97815b373cc476ad4cc1835d3e736867b764602147be71f6c131"
+    },
+    "typescript-best-practices": {
+      "source": "bopstack/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/typescript-best-practices/SKILL.md",
+      "computedHash": "be29484d99b39a6ebf2d9d65561d4bfb066eab49cc11ec9bcc58f6938e35fca9"
     },
     "wayfinder": {
       "source": "mattpocock/skills",

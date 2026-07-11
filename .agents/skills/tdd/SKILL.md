@@ -1,36 +1,86 @@
 ---
 name: tdd
-description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+description: Systematic test-driven development with proper test isolation. Use when implementing code changes, writing tests, or when TDD process guidance is needed.
 ---
 
-# Test-Driven Development
+# TDD Engineer
 
-TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle — consult them before and during the loop, not after.
+Act as a top-tier software engineer with serious TDD discipline to systematically implement software using the TDD process.
 
-When exploring the codebase, read `CONTEXT.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
+## assert
 
-## What a good test is
+type assert = ({ given: string, should: string, actual: any, expected: any }) {
+`given` and `should` must clearly state the functional requirements from an acceptance perspective, and should avoid describing literal values.
+Tests must demonstrate locality: The test should not rely on external state or other tests.
 
-Tests verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't. A good test reads like a specification — "user can checkout with valid cart" tells you exactly what capability exists — and survives refactors because it doesn't care about internal structure.
+Ensure that the test answers these 5 questions { 1. What is the unit under test? (test should be in a named describe block) 2. What is the expected behavior? ($given and $should arguments are adequate)
+    3. What is the actual output? (the unit under test was exercised by the test)
+    4. What is the expected output? ($expected and/or $should are adequate) 5. How can we find the bug? (implicitly answered if the above questions are answered correctly)
+}
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+Tests must be:
 
-## Seams — where tests go
+- Readable - Answer the 5 questions.
+- Isolated/Integrated
+  - Units under test should be isolated from each other
+  - Tests should be isolated from each other with no shared mutable state.
+  - For integration tests, test integration with the real system.
+- Thorough - Test expected/very likely edge cases
+- Explicit - Everything you need to know to understand the test should be part of the test itself. If you need to produce the same data structure many times for many test cases, create a factory function and invoke it from the individual tests, rather than sharing mutable fixtures between tests.
+  }
 
-A **seam** is the public boundary you test at: the interface where you observe behavior without reaching inside. Tests live at seams, never against internals.
+## Process
 
-**Test only at pre-agreed seams.** Before writing any test, write down the seams under test and confirm them with the user. No test is written at an unconfirmed seam. You can't test everything — agreeing the seams up front is how testing effort lands on the critical paths and complex logic instead of every edge case.
+For each unit of code, create a test suite, one requirement at a time:
 
-Ask: "What's the public interface, and which seams should we test?"
+1. If the user has not specified a test framework or technology stack, ask them before implementing.
+1. If the calling API is unspecified, propose a calling API that serves the functional requirements and creates an optimal developer experience.
+1. Write a test. Run the test runner and watch the test fail.
+1. Implement the code to make the test pass. Implement ONLY the code needed to make the test pass.
+1. Run the test runner: fail => fix bug; pass => continue
+1. Get approval from the user before moving on.
+1. Repeat the TDD iteration process for the next functional requirement.
 
-## Anti-patterns
+## Describe/Test Wrappers
 
-- **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
-- **Tautological** — the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
-- **Horizontal slicing** — writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead — one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
+In most testing frameworks, there is a `describe` function and possibly a nested `test` or `it` wrapper.
 
-## Rules of the loop
+Use the string in the `describe` function to name the unit under test.
 
-- **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
+Use the string in the `test` function to offer a brief category for the test, e.g. "new account creation".
+
+Because of conflicts with the `assert` function API and description, avoid the `it` wrapper entirely, if possible.
+
+## Default Test Utils
+
+For Vitest/Riteway tests:
+
+- Spies and stubs: vi.fn and vi.spyOn
+  - Vitest ships tinyspy under the hood. Simple, fast, and no extra deps.
+- Module mocking: vi.mock with vi.importActual for partial mocks
+  - Works cleanly with ESM. Avoid require.
+- Timers: vi.useFakeTimers and vi.setSystemTime
+  - UI testing strategy:
+  - Redux actions/selectors: Pure tests (no component rendering needed)
+  - Side effects: must be isolated from UI
+  - Component rendering: Use riteway/render for markup verification
+  - Browser interactions: Use Playwright to exercise real browser APIs
+  - Never use @testing-library/react (redundant with above patterns)
+
+Constraints {
+Unless directed otherwise, always colocate tests with the code they are testing.
+Carefully think through correct output.
+Avoid hallucination.
+This is very important to ensure software works as expected and that user safety is protected. Please do your best work.
+When testing app state logic, always use selectors to read from the state. NEVER read directly from state objects.
+Avoid writing tests for expected types/shapes. It would be redundant with type checks.
+
+Mocking is a code smell. {
+mocks in unit tests => build both a mocked and an integration candidate; churn to compare total code impact; the winning approach must (1) lower or match the composite score AND (2) meaningfully exercise the functional requirement of the unit under test — not just verify mock calls. Cheaper substitutes (e.g. echo instead of a real LLM) are preferred when they satisfy both conditions. Mocks are only justified when real integration is (a) technically infeasible or (b) prohibitively expensive — meaning irrecoverable real-world side effects, physical infrastructure unavailable in CI, or per-run cost that makes the test suite economically non-viable.
+}
+}
+
+State {
+testFramework = Riteway Library + Vitest
+libraryStack // e.g. React + Redux + Redux Saga
+}
