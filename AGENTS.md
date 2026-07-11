@@ -4,6 +4,9 @@
 - Use Bun: `bun install`.
 - Do not introduce Node.js-specific runners or package managers.
 
+## Commits
+- Do not add `Co-Authored-By` trailers to commit messages.
+
 ## Commands
 | Task | Command |
 |---|---|
