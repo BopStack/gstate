@@ -1,10 +1,36 @@
 {
-  "name": "gstate",
+  "name": "@bopstack/gstate",
+  "version": "0.1.0",
+  "description": "Branch-aware, repository-local state for Git workflows.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BopStack/gstate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BopStack/gstate/issues"
+  },
+  "homepage": "https://github.com/BopStack/gstate#readme",
+  "keywords": [
+    "git",
+    "cli",
+    "state",
+    "workflow"
+  ],
   "module": "index.ts",
   "type": "module",
-  "private": true,
   "bin": {
     "gstate": "./index.ts"
+  },
+  "files": [
+    "index.ts",
+    "src/git_state.ts"
+  ],
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@types/bun": "latest"

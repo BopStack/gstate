@@ -29,21 +29,24 @@ resolved:   editor=code, theme=dark
 
 ## Install
 
-From this repository checkout:
+Install the published CLI:
+
+```sh
+bun add --global @bopstack/gstate
+```
+
+Or install and link a repository checkout for development:
 
 ```sh
 bun install
 bun link
 ```
 
-`gstate` is now available on your PATH. To run it without linking:
+`gstate` is now available on your PATH. To run it without installation:
 
 ```sh
-bun ./index.ts <command>
+bunx @bopstack/gstate <command>
 ```
-
-> [!NOTE]
-> This package is private. `bun link` is the supported installation path; it is not published to a package registry.
 
 ## Quick start
 
